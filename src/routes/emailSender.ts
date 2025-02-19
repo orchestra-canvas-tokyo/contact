@@ -1,7 +1,6 @@
 import { Resend } from 'resend';
 import { categories, type CategoryKey, type RequestBody } from './validator';
 import { env } from '$env/dynamic/private';
-import { TEST_EMAIL_CC } from '$env/static/private';
 
 const ccsByCategory: Record<string, string[]> = {
 	'concert, ticket': ['webadmin@orch-canvas.tokyo', 'info@orch-canvas.tokyo'],
@@ -30,11 +29,13 @@ export async function sendEmail(content: RequestBody, apiKey: string) {
 		});
 	} else {
 		// テスト環境
+		const cc = env['TEST_EMAIL_CC'] || 'webadmin@orch-canvas.tokyo';
+
 		await resend.emails.send({
 			from: 'お問い合わせフォーム <webadmin@orch-canvas.tokyo>',
 			to: [content.email],
-			cc: [TEST_EMAIL_CC],
-			subject: subject,
+			cc: cc,
+			subject: `【テスト環境】${subject}`,
 			text: textBody,
 			html: htmlBody
 		});
