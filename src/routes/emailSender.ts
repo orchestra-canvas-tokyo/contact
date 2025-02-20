@@ -16,8 +16,8 @@ export async function sendEmail(content: RequestBody, apiKey: string) {
 
 	const resend = new Resend(apiKey);
 
-	if (env['CF_PAGES_BRANCH'] === 'production') {
-		// 本番環境
+	const isProduction = env['CF_PAGES_BRANCH'] === 'production';
+	if (isProduction) {
 		await resend.emails.send({
 			from: 'お問い合わせフォーム <webadmin@orch-canvas.tokyo>',
 			to: [content.email],
@@ -28,13 +28,9 @@ export async function sendEmail(content: RequestBody, apiKey: string) {
 			html: htmlBody
 		});
 	} else {
-		// テスト環境
-		const cc = env['TEST_EMAIL_CC'] || 'webadmin@orch-canvas.tokyo';
-
 		await resend.emails.send({
 			from: 'お問い合わせフォーム <webadmin@orch-canvas.tokyo>',
 			to: [content.email],
-			cc: cc,
 			subject: `【テスト環境】${subject}`,
 			text: textBody,
 			html: htmlBody
@@ -43,7 +39,8 @@ export async function sendEmail(content: RequestBody, apiKey: string) {
 }
 
 function generateTextBody(content: RequestBody): string {
-	let body: string = `Orchestra Canvas Tokyoです。
+	let body: string = `
+Orchestra Canvas Tokyoです。
 ホームページより、お問い合わせを承りました。
 
 必要に応じてメールにてご返答いたします。
@@ -53,14 +50,15 @@ function generateTextBody(content: RequestBody): string {
 
 分類：${categories[content.categoryKey]}
 本分：
-${content.body}`;
+${content.body}
+	`.trim();
 
 	// 名前が送信されている場合、宛名と適当な改行を挿入
 	if (content.name)
 		body =
-			`${content.name}さま
-
-` + body;
+			`
+${content.name}さま
+			`.trim() + body;
 
 	return body;
 }

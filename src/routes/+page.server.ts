@@ -1,7 +1,7 @@
 import type { Actions, ServerLoad } from '@sveltejs/kit';
 import { RECAPTCHA_SECRET, RESEND_API_KEY } from '$env/static/private';
 import { statusScheme, validate, type Log } from './validator';
-// import { log } from './logger';
+import { log } from './logger';
 import { verifyCaptcha } from './captchaVerifier';
 import { sendEmail } from './emailSender';
 
@@ -16,8 +16,7 @@ export const load: ServerLoad = async ({ locals }) => {
 };
 
 export const actions = {
-	// default: async ({ locals, request, platform }) => {
-	default: async ({ locals, request }) => {
+	default: async ({ locals, request, platform }) => {
 		const { session } = locals;
 
 		// リクエストボディをオブジェクトに
@@ -42,7 +41,7 @@ export const actions = {
 		// csrfトークンを検証
 		if (session.data.csrfToken !== validatedRequestBody.csrfToken) {
 			logData.status = statusScheme.parse('invalid csrf');
-			// await log(platform?.env.DB, logData);
+			await log(platform?.env.DB, logData);
 			return { success: false, message: 'Invalid csrf token' };
 		}
 
@@ -53,7 +52,7 @@ export const actions = {
 		);
 		if (!captchaResult) {
 			logData.status = statusScheme.parse('invalid captcha');
-			// await log(platform?.env.DB, logData);
+			await log(platform?.env.DB, logData);
 			return { success: false, message: 'Invalid captcha token' };
 		}
 
@@ -62,7 +61,7 @@ export const actions = {
 
 		// データベースにログ
 		logData.status = statusScheme.parse('have sent email');
-		// await log(platform?.env.DB, logData);
+		await log(platform?.env.DB, logData);
 
 		return { success: true };
 	}
