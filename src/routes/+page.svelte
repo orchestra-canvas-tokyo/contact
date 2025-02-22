@@ -72,6 +72,7 @@
 			applyAction(result);
 		} catch {
 			formResponseStateChanged(false);
+			console.log('Failed to submit the form.');
 		} finally {
 			isSubmitting = false; // 送信ボタンを再度有効化
 		}
@@ -85,6 +86,7 @@
 			toastMessage = null;
 		} else {
 			formResponseStateChanged(form.success);
+			console.log(form.message);
 		}
 	});
 </script>
