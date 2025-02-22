@@ -155,6 +155,10 @@
 		letter-spacing: var(--letter-spacing);
 	}
 
+	:global(body) {
+		margin: 0;
+	}
+
 	a {
 		color: var(--main-color);
 		text-decoration: none;
@@ -166,7 +170,7 @@
 		grid-template-columns: auto 1fr;
 		gap: 20px;
 	}
-	@media (max-width: 950px) {
+	@media (max-width: 790px) {
 		.form-container {
 			grid-template-columns: inherit;
 			gap: 5px;
@@ -192,7 +196,7 @@
 		background-color: var(--main-color);
 		color: var(--background-color);
 	}
-	@media (max-width: 950px) {
+	@media (max-width: 790px) {
 		input[type='text'],
 		input[type='email'],
 		select,
@@ -242,11 +246,6 @@
 	.toast.shown {
 		transform: none;
 		opacity: 1;
-	}
-	@media (max-width: 950px) {
-		.toast {
-			left: 20px;
-		}
 	}
 
 	:global(.grecaptcha-badge) {
