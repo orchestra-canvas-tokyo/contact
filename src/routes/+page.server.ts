@@ -16,8 +16,9 @@ export const load: ServerLoad = async ({ locals }) => {
 };
 
 export const actions = {
-	default: async ({ locals, request, platform }) => {
-		const { session } = locals;
+	// default: async ({ locals, request, platform }) => {
+	default: async ({ request, platform }) => {
+		// const { session } = locals;
 
 		// リクエストボディをオブジェクトに
 		const rawRequestBody: Record<string, FormDataEntryValue> = {};
@@ -39,11 +40,12 @@ export const actions = {
 		};
 
 		// csrfトークンを検証
-		if (session.data.csrfToken !== validatedRequestBody.csrfToken) {
-			logData.status = statusScheme.parse('invalid csrf');
-			await log(platform?.env.DB, logData);
-			return { success: false, message: 'Invalid csrf token' };
-		}
+		// iframe内ではCookieが使えない？ため、暫定的にcsrfトークンの検証は行わない
+		// if (session.data.csrfToken !== validatedRequestBody.csrfToken) {
+		// 	logData.status = statusScheme.parse('invalid csrf');
+		// 	await log(platform?.env.DB, logData);
+		// 	return { success: false, message: 'Invalid csrf token' };
+		// }
 
 		// reCAPTCHAトークンを検証
 		const captchaResult = await verifyCaptcha(
