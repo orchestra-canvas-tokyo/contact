@@ -124,9 +124,11 @@
 
 	<!-- ref: https://developers.google.com/recaptcha/docs/faq?hl=ja#id-like-to-hide-the-recaptcha-badge.-what-is-allowed https://developers.google.com/recaptcha/docs/faq?hl=ja#id-like-to-hide-the-recaptcha-badge.-what-is-allowed-->
 	<p class="recaptcha-description">
-		このサイトはreCAPTCHAによって保護されており、Googleの<a
-			href="https://policies.google.com/privacy">プライバシーポリシー</a
-		>と<a href="https://policies.google.com/terms">利用規約</a>が適用されます。
+		このサイトはreCAPTCHAによって保護されており、Googleの
+		<a href="https://policies.google.com/privacy" target="_top">プライバシーポリシー</a>
+		と
+		<a href="https://policies.google.com/terms" target="_top">利用規約</a>
+		が適用されます。
 	</p>
 </form>
 
