@@ -6,7 +6,7 @@ export const statusScheme = z
 export type Status = z.infer<typeof statusScheme>;
 
 const categoryKeyScheme = z
-	.enum(['concert, ticket', 'advertisement', 'hp, sns', 'others'])
+	.enum(['concert, ticket', 'advertisement', 'hp, sns', 'designer', 'others'])
 	.brand<'Category'>();
 export type CategoryKey = z.infer<typeof categoryKeyScheme>;
 
@@ -14,8 +14,17 @@ export const categories: Record<string, string> = {
 	'concert, ticket': '演奏会、チケットについて',
 	advertisement: '挟み込みについて',
 	'hp, sns': 'ホームページ、SNSについて',
+	designer: 'デザイナー募集について',
 	others: 'その他'
 } as Record<CategoryKey, string>;
+
+export const ccsByCategory: Record<string, string[]> = {
+	'concert, ticket': ['webadmin@orch-canvas.tokyo', 'info@orch-canvas.tokyo'],
+	advertisement: ['webadmin@orch-canvas.tokyo', 'pr@orch-canvas.tokyo'],
+	'hp, sns': ['webadmin@orch-canvas.tokyo'],
+	designer: ['webadmin@orch-canvas.tokyo', 'kouhou@orch-canvas.tokyo'],
+	others: ['webadmin@orch-canvas.tokyo', 'contact@orch-canvas.tokyo']
+} as Record<CategoryKey, string[]>;
 
 export const maxBodyLength = 1000;
 
