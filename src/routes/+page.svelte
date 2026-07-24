@@ -19,10 +19,6 @@
 	// csrfトークン
 	const csrfToken = data.csrfToken;
 
-	// お問い合わせ種別
-	let categoryKey = $state('');
-	let isDesignerCategory = $derived(categoryKey === 'designer');
-
 	// フォーム送信後のtoast
 	let toastMessage: string | null = $state(null);
 	let isToastShown = $state(false); // フェードアウト時に要素の幅が小さくならないように別管理
@@ -36,7 +32,7 @@
 			// フォームの値を初期化する
 			(document.getElementById('name') as HTMLInputElement).value = '';
 			(document.getElementById('email') as HTMLInputElement).value = '';
-			categoryKey = '';
+			(document.getElementById('categoryKey') as HTMLSelectElement).selectedIndex = 0;
 			(document.getElementById('body') as HTMLTextAreaElement).value = '';
 		}
 
@@ -51,7 +47,6 @@
 	const reCaptchaSiteKey = '6LfixUwmAAAAAKr_6ZeTyiPBnYq-Li5KO8_5EVbC';
 	async function onSubmit(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
 		event.preventDefault();
-		if (isDesignerCategory) return;
 
 		isSubmitting = true; // 送信ボタンを無効化
 		try {
@@ -102,36 +97,17 @@
 
 <form method="POST" onsubmit={onSubmit}>
 	<div class="form-container">
+		<label for="name">お名前</label>
+		<input type="text" id="name" name="name" disabled={isSubmitting} />
+		<label for="email" class="required-label">メールアドレス</label>
+		<input type="email" id="email" name="email" required disabled={isSubmitting} />
 		<label for="categoryKey" class="required-label">種類</label>
-		<select
-			id="categoryKey"
-			name="categoryKey"
-			required
-			bind:value={categoryKey}
-			disabled={isSubmitting}
-		>
-			<option value="" disabled hidden></option>
+		<select id="categoryKey" name="categoryKey" required disabled={isSubmitting}>
+			<option value="" selected hidden></option>
 			{#each Object.entries(categories) as [key, description]}
 				<option value={key}>{description}</option>
 			{/each}
 		</select>
-		{#if isDesignerCategory}
-			<div class="recruitment-closed" role="status">
-				<p>ご検討いただきありがとうございます。</p>
-				<p>今回の募集は終了いたしました。</p>
-				<p>たくさんのご応募ありがとうございました。</p>
-			</div>
-		{/if}
-		<label for="name">お名前</label>
-		<input type="text" id="name" name="name" disabled={isSubmitting || isDesignerCategory} />
-		<label for="email" class="required-label">メールアドレス</label>
-		<input
-			type="email"
-			id="email"
-			name="email"
-			required
-			disabled={isSubmitting || isDesignerCategory}
-		/>
 		<label for="body" class="required-label">本文</label>
 		<textarea
 			id="body"
@@ -139,12 +115,12 @@
 			rows="6"
 			maxlength={maxBodyLength}
 			required
-			disabled={isSubmitting || isDesignerCategory}
+			disabled={isSubmitting}
 		></textarea>
 	</div>
 
 	<input type="hidden" name="csrfToken" value={csrfToken} />
-	<button type="submit" disabled={isSubmitting || isDesignerCategory}>送信</button>
+	<button type="submit" disabled={isSubmitting}>送信</button>
 
 	<!-- ref: https://developers.google.com/recaptcha/docs/faq?hl=ja#id-like-to-hide-the-recaptcha-badge.-what-is-allowed https://developers.google.com/recaptcha/docs/faq?hl=ja#id-like-to-hide-the-recaptcha-badge.-what-is-allowed-->
 	<p class="recaptcha-description">
@@ -213,18 +189,6 @@
 		background-color: var(--main-color);
 		color: var(--background-color);
 		font-size: 0.75em;
-	}
-
-	.recruitment-closed {
-		grid-column: 1 / -1;
-		padding: 16px;
-		border: 1px solid var(--secondary-color);
-		border-radius: 4px;
-		background-color: var(--secondary-background-color);
-		line-height: 1.8;
-	}
-	.recruitment-closed p {
-		margin: 0;
 	}
 
 	input[type='text'],
