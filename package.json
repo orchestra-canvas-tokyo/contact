@@ -14,7 +14,7 @@
 		"lint": "prettier --check . && eslint .",
 		"lint:prettier": "prettier --check .",
 		"lint:eslint": "eslint .",
-		"test": "node --import tsx tests/validator.test.ts",
+		"test": "node --import tsx --test tests/*.test.ts tests/*.test.mjs",
 		"precommit": "npm-run-all --parallel check lint:* test"
 	},
 	"devDependencies": {
