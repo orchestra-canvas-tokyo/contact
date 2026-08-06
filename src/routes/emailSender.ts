@@ -1,6 +1,13 @@
 import { Resend } from 'resend';
-import { categories, ccsByCategory, type RequestBody } from './validator';
+import { categories, type CategoryKey, type RequestBody } from './validator';
 import { env } from '$env/dynamic/private';
+
+const ccsByCategory: Record<string, string[]> = {
+	'concert, ticket': ['webadmin@orch-canvas.tokyo', 'info@orch-canvas.tokyo'],
+	advertisement: ['webadmin@orch-canvas.tokyo', 'pr@orch-canvas.tokyo'],
+	'hp, sns': ['webadmin@orch-canvas.tokyo'],
+	others: ['webadmin@orch-canvas.tokyo', 'contact@orch-canvas.tokyo']
+} as Record<CategoryKey, string[]>;
 
 export async function sendEmail(content: RequestBody, apiKey: string) {
 	const subject = 'お問い合わせを承りました（Orchestra Canvas Tokyo）';
